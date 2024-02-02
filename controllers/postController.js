@@ -242,8 +242,7 @@ exports.updateComment = async (req, res) => {
 
 exports.likeComment = async (req, res) => {
   try {
-    console.log('Received postId:', req.params.postId);
-    console.log('Received commentId:', req.params.commentId);
+   
     console.log('Authenticated user ID:', req.user.id);
     const postId = req.params.postId;
     const userId = req.user.id;
@@ -259,7 +258,9 @@ exports.likeComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({ error: 'Comment not found' });
     }
-
+   
+    console.log('Fetched comment:', comment);
+    
     // Check if the user has already liked the comment
     if (comment.likes.includes(userId)) {
       return res.status(400).json({ message: 'Comment already liked' });
