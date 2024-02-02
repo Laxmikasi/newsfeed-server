@@ -242,6 +242,9 @@ exports.updateComment = async (req, res) => {
 
 exports.likeComment = async (req, res) => {
   try {
+    console.log('Received postId:', req.params.postId);
+    console.log('Received commentId:', req.params.commentId);
+    console.log('Authenticated user ID:', req.user.id);
     const postId = req.params.postId;
     const userId = req.user.id;
 
