@@ -247,14 +247,14 @@ exports.likeComment = async (req, res) => {
 
     const postId = req.params.postId;
     const userId = req.user.id;
-
+    const commentId= req.params.commentId
     const post = await Post.findById(postId);
 
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    const comment = post.comments.id(req.params.commentId);
+    const comment = post.comments.id(commentId);
 
     if (!comment) {
       return res.status(404).json({ error: 'Comment not found' });
