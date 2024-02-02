@@ -241,6 +241,8 @@ exports.updateComment = async (req, res) => {
 
 // Assuming this is your existing code
 
+// Update your postController.js
+
 exports.likeComment = async (req, res) => {
   try {
     console.log('Received postId:', req.params.postId);
@@ -253,20 +255,17 @@ exports.likeComment = async (req, res) => {
     const post = await Post.findById(postId);
 
     if (!post) {
-      console.log('Post not found');
       return res.status(404).json({ error: 'Post not found' });
     }
 
     const comment = post.comments.id(req.params.commentId);
 
     if (!comment) {
-      console.log('Comment not found');
       return res.status(404).json({ error: 'Comment not found' });
     }
 
     // Check if the user has already liked the comment
     if (comment.likes.includes(userId)) {
-      console.log('Comment already liked');
       return res.status(400).json({ message: 'Comment already liked' });
     }
 
@@ -277,13 +276,17 @@ exports.likeComment = async (req, res) => {
     // Save the updated post
     const savedPost = await post.save();
 
-    console.log('Successfully liked comment');
     res.status(200).json(savedPost);
   } catch (error) {
     console.error('Error liking comment:', error);
+
+    // Log the full error details
+    console.error(error);
+
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
