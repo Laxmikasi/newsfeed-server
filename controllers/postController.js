@@ -239,7 +239,6 @@ exports.updateComment = async (req, res) => {
   }
 };
 
-
 exports.likeComment = async (req, res) => {
   try {
     console.log('Received postId:', req.params.postId);
@@ -279,6 +278,7 @@ exports.likeComment = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
