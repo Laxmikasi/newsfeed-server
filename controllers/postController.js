@@ -239,47 +239,96 @@ exports.updateComment = async (req, res) => {
   }
 };
 
-exports.likeComment = async (req, res) => {
+// exports.likeComment = async (req, res) => {
+//   try {
+//     console.log('Received postId:', req.params.postId);
+//     console.log('Received commentId:', req.params.commentId);
+//     console.log('Authenticated user ID:', req.user.id);
+
+//     const postId = req.params.postId;
+//     const userId = req.user.id;
+//     const commentId= req.params.commentId
+//     const post = await Post.findById(postId);
+
+//     if (!post) {
+//       return res.status(404).json({ error: 'Post not found' });
+//     }
+
+//     const comment = post.comments.id(commentId);
+
+//     if (!comment) {
+//       return res.status(404).json({ error: 'Comment not found' });
+//     }
+
+//     // Check if the user has already liked the comment
+//     if (comment.likes.includes(userId)) {
+//       return res.status(400).json({ message: 'Comment already liked' });
+//     }
+
+//     // Add the user's ID to the likes array and update the likes count
+//     comment.likes.push(userId);
+//     comment.likesCount += 1;
+
+//     // Save the updated post
+//     const savedPost = await post.save();
+
+//     res.status(200).json(savedPost);
+//   } catch (error) {
+//     console.error('Error liking comment:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+
+
+
+exports.likeComment = async(req, res) =>{
   try {
-    console.log('Received postId:', req.params.postId);
-    console.log('Received commentId:', req.params.commentId);
-    console.log('Authenticated user ID:', req.user.id);
 
-    const postId = req.params.postId;
-    const userId = req.user.id;
-    const commentId= req.params.commentId
-    const post = await Post.findById(postId);
+      // accessing ids from like route
+      const postId = req.params.postId;
+      const userId = req.user.id;
+      const commentId= req.params.commentId
 
-    if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
+      // checking id's validitity in the database
+      const postExist = await Post.findById(postId);
+      const userExist = await User.findById(userId);
+
+      const commentExist = postExist.comments.id(commentId);
+
+
+      if(!postExist){
+          return res.status(400).json({message: "Post not found"});
+      }
+      if(!commentExist){
+        return res.status(400).json({message: "Post not found"});
     }
 
-    const comment = post.comments.id(commentId);
 
-    if (!comment) {
-      return res.status(404).json({ error: 'Comment not found' });
-    }
+      if(!userExist){
+          return res.status(400).json({message: "User not found"});
+      }
 
-    // Check if the user has already liked the comment
-    if (comment.likes.includes(userId)) {
-      return res.status(400).json({ message: 'Comment already liked' });
-    }
+      // checking if user already liked the post in the past
+      if(commentExist.likedBy.includes(userId)){
+          return res.status(400).json({message: "comment already liked"});
+      }
 
-    // Add the user's ID to the likes array and update the likes count
-    comment.likes.push(userId);
-    comment.likesCount += 1;
+      // checking if user already disliked then remove dislike
+      if(commentExist.dislikedBy.includes(userId)){
+          commentExist.dislikedBy.pull(userId);
+          commentExist.dislikes -= 1;
+      }
 
-    // Save the updated post
-    const savedPost = await post.save();
+      // creating like and storing into the database
+      commentExist.likedBy.push(userId);
+      commentExist.likes += 1;
 
-    res.status(200).json(savedPost);
+      const savedLikes = await postExist.save();
+      res.status(200).json(savedLikes);
+      
   } catch (error) {
-    console.error('Error liking comment:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({error: error});
   }
-};
-
-
-
-
+}
 
