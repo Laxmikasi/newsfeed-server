@@ -238,3 +238,42 @@ exports.updateComment = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+exports.likeComment = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const userId = req.user.id;
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const comment = post.comments.id(req.params.commentId);
+
+    if (!comment) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+
+    // Check if the user has already liked the comment
+    if (comment.likes.includes(userId)) {
+      return res.status(400).json({ message: 'Comment already liked' });
+    }
+
+    // Add the user's ID to the likes array and update the likes count
+    comment.likes.push(userId);
+    comment.likesCount += 1;
+
+    // Save the updated post
+    const savedPost = await post.save();
+
+    res.status(200).json(savedPost);
+  } catch (error) {
+    console.error('Error liking comment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+

@@ -25,6 +25,7 @@ router.post('/comment/:postId',authMiddleware, postController.commentPost);
 router.get('/allPosts', postController.readPosts);
 router.put('/comment/:postId/:commentId', authMiddleware, postController.updateComment);
 router.delete('/comment/:postId/:commentId', authMiddleware, postController.deleteComment);
+router.post('/api/commentlike/:postId/:commentId', authMiddleware, postController.likeComment);
 
 module.exports = router;
 
