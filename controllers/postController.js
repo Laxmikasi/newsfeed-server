@@ -239,9 +239,6 @@ exports.updateComment = async (req, res) => {
   }
 };
 
-// Assuming this is your existing code
-
-// Update your postController.js
 
 exports.likeComment = async (req, res) => {
   try {
@@ -279,10 +276,6 @@ exports.likeComment = async (req, res) => {
     res.status(200).json(savedPost);
   } catch (error) {
     console.error('Error liking comment:', error);
-
-    // Log the full error details
-    console.error(error);
-
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
