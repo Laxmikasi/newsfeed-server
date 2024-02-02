@@ -242,7 +242,7 @@ exports.updateComment = async (req, res) => {
 
 exports.likeComment = async (req, res) => {
   try {
-   
+    const { ObjectId } = require('mongoose').Types;
     console.log('Authenticated user ID:', req.user.id);
     const postId = req.params.postId;
     const userId = req.user.id;
@@ -254,22 +254,19 @@ exports.likeComment = async (req, res) => {
     }
 
     const comment = post.comments.id(req.params.commentId);
+console.log('Fetched comment:', comment);
 
-    if (!comment) {
-      return res.status(404).json({ error: 'Comment not found' });
-    }
-   
-    console.log('Fetched comment:', comment);
-    
-    // Check if the user has already liked the comment
-    if (comment.likes.includes(userId)) {
-      return res.status(400).json({ message: 'Comment already liked' });
-    }
+if (!comment) {
+  return res.status(404).json({ error: 'Comment not found' });
+}
+
 
     // Add the user's ID to the likes array and update the likes count
     comment.likes.push(userId);
     comment.likesCount += 1;
-
+    if (!ObjectId.isValid(req.params.postId) || !ObjectId.isValid(req.params.commentId)) {
+      return res.status(400).json({ error: 'Invalid ObjectId format' });
+    }
     // Save the updated post
     const savedPost = await post.save();
 
@@ -278,6 +275,7 @@ exports.likeComment = async (req, res) => {
     console.error('Error liking comment:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+  
 };
 
 
