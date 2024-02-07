@@ -26,6 +26,10 @@ router.get('/allPosts', postController.readPosts);
 router.put('/comment/:postId/:commentId', authMiddleware, postController.updateComment);
 router.delete('/comment/:postId/:commentId', authMiddleware, postController.deleteComment);
 router.post('/commentlike/:postId/:commentId', authMiddleware, postController.likeComment);
+router.post('/commentdislike/:postId/:commentId', authMiddleware, postController.dislikeComment);
+router.post('/commentreply/:postId/:commentId', authMiddleware, postController.replyToComment);
+
+
 
 
 module.exports = router;

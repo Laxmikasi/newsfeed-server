@@ -239,49 +239,6 @@ exports.updateComment = async (req, res) => {
   }
 };
 
-// exports.likeComment = async (req, res) => {
-//   try {
-//     console.log('Received postId:', req.params.postId);
-//     console.log('Received commentId:', req.params.commentId);
-//     console.log('Authenticated user ID:', req.user.id);
-
-//     const postId = req.params.postId;
-//     const userId = req.user.id;
-//     const commentId= req.params.commentId
-//     const post = await Post.findById(postId);
-
-//     if (!post) {
-//       return res.status(404).json({ error: 'Post not found' });
-//     }
-
-//     const comment = post.comments.id(commentId);
-
-//     if (!comment) {
-//       return res.status(404).json({ error: 'Comment not found' });
-//     }
-
-//     // Check if the user has already liked the comment
-//     if (comment.likes.includes(userId)) {
-//       return res.status(400).json({ message: 'Comment already liked' });
-//     }
-
-//     // Add the user's ID to the likes array and update the likes count
-//     comment.likes.push(userId);
-//     comment.likesCount += 1;
-
-//     // Save the updated post
-//     const savedPost = await post.save();
-
-//     res.status(200).json(savedPost);
-//   } catch (error) {
-//     console.error('Error liking comment:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// };
-
-
-
-
 exports.likeComment = async(req, res) =>{
   try {
 
@@ -331,4 +288,92 @@ exports.likeComment = async(req, res) =>{
       res.status(500).json({error: error});
   }
 }
+
+exports.dislikeComment = async (req, res) => {
+  try {
+    // Accessing IDs from the dislike route
+    const postId = req.params.postId;
+    const userId = req.user.id;
+    const commentId = req.params.commentId;
+
+    // Checking IDs validity in the database
+    const postExist = await Post.findById(postId);
+    const userExist = await User.findById(userId);
+
+    const commentExist = postExist.comments.id(commentId);
+
+    if (!postExist) {
+      return res.status(400).json({ message: 'Post not found' });
+    }
+
+    if (!commentExist) {
+      return res.status(400).json({ message: 'Comment not found' });
+    }
+
+    if (!userExist) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    // Checking if the user already disliked the comment in the past
+    if (commentExist.dislikedBy.includes(userId)) {
+      return res.status(400).json({ message: 'Comment already disliked' });
+    }
+
+    // Checking if the user already liked, then remove the like
+    if (commentExist.likedBy.includes(userId)) {
+      commentExist.likedBy.pull(userId);
+      commentExist.likes -= 1;
+    }
+
+    // Creating dislike and storing it in the database
+    commentExist.dislikedBy.push(userId);
+    commentExist.dislikes += 1;
+
+    const savedDislikes = await postExist.save();
+    res.status(200).json(savedDislikes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Import necessary modules and dependencies
+require('express-validator');
+
+// Reply to a comment controller
+exports.  replyToComment = async (req, res) => {
+  try {
+    // Validate request parameters, if needed
+    // For example, you might want to validate postId and commentId
+
+    // Your actual logic for adding a reply to a comment
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
+    const { text } = req.body; // Assuming the reply text is sent in the request body
+
+    // Assume you have a method in your model to handle the reply logic
+    // For example, using Mongoose
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    const comment = post.comments.find(comment => comment._id.toString() === commentId);
+
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    // Add logic to add a reply to the comment, for example, push a new reply object
+    comment.replies.push({ text, user: req.user.id }); // Assuming you have user information in the request
+
+    // Save the updated post
+    await post.save();
+
+    return res.status(200).json({ message: 'Reply added successfully' });
+  } catch (error) {
+    console.error('Error adding reply to comment:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
