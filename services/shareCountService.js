@@ -2,7 +2,6 @@
 
 const shareCountService = {
     saveShareCounts: async (shareCount) => {
-        // This is a placeholder for saving share counts data to the database or performing other business logic
         console.log('Received share counts for post ID:', shareCount.postId);
         console.log('Facebook share count:', shareCount.facebookShareCount);
         console.log('Twitter share count:', shareCount.twitterShareCount);

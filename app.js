@@ -40,7 +40,7 @@ app.use("/api", userRoutes);
 app.use("/api", loginRoutes);
 app.use("/api", postRoutes);
 app.use("/api", forgotRoutes);
-app.use('/api', shareCountRoutes);
+app.use("/api", shareCountRoutes);
 
 
 
