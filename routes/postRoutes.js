@@ -25,7 +25,9 @@ router.post('/comment/:postId',authMiddleware, postController.commentPost);
 router.get('/allPosts', postController.readPosts);
 router.put('/comment/:postId/:commentId', authMiddleware, postController.updateComment);
 router.delete('/comment/:postId/:commentId', authMiddleware, postController.deleteComment);
+router.post('/replay/:postId/:commentId', authMiddleware, postController.replayToComment );
 router.post('/commentlike/:postId/:commentId', authMiddleware, postController.likeComment);
+router.post('/commentdislike/:postId/:commentId', authMiddleware, postController.dislikeComment);
 
 
 module.exports = router;
