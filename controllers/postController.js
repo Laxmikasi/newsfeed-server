@@ -370,8 +370,8 @@ exports.dislikeComment = async(req, res) =>{
       }
 
       // checking if user already liked the post in the past
-      if(commentExist.likedBy.includes(userId)){
-          return res.status(400).json({message: "comment already liked"});
+      if(commentExist.dislikedBy.includes(userId)){
+          return res.status(400).json({message: "comment already disliked"});
       }
 
       // checking if user already disliked then remove dislike
@@ -381,8 +381,8 @@ exports.dislikeComment = async(req, res) =>{
       }
 
       // creating like and storing into the database
-      commentExist.likedBy.push(userId);
-      commentExist.likes += 1;
+      commentExist.dislikedBy.push(userId);
+      commentExist.dislikes += 1;
 
       const savedLikes = await postExist.save();
       res.status(200).json(savedLikes);
