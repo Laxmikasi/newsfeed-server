@@ -340,46 +340,6 @@ exports.dislikeComment = async (req, res) => {
   }
 };
 
-// Import necessary modules and dependencies
-require('express-validator');
-
-// Reply to a comment controller
-exports.  replyToComment = async (req, res) => {
-  try {
-    // Validate request parameters, if needed
-    // For example, you might want to validate postId and commentId
-
-    // Your actual logic for adding a reply to a comment
-    const postId = req.params.postId;
-    const commentId = req.params.commentId;
-    const { text } = req.body; // Assuming the reply text is sent in the request body
-
-    // Assume you have a method in your model to handle the reply logic
-    // For example, using Mongoose
-    const post = await Post.findById(postId);
-
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-
-    const comment = post.comments.find(comment => comment._id.toString() === commentId);
-
-    if (!comment) {
-      return res.status(404).json({ message: 'Comment not found' });
-    }
-
-    // Add logic to add a reply to the comment, for example, push a new reply object
-    comment.replies.push({ text, user: req.user.id }); // Assuming you have user information in the request
-
-    // Save the updated post
-    await post.save();
-
-    return res.status(200).json({ message: 'Reply added successfully' });
-  } catch (error) {
-    console.error('Error adding reply to comment:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
 
 
 exports.dislikeComment = async(req, res) =>{
@@ -454,7 +414,7 @@ exports.replayToComment = async (req, res) => {
     
 
     if (text && typeof text === 'string' && text.trim() !== '') {
-      comment.replays.push({ text, repliedBy: userId });
+      comment.replays.push({ text, replyedBy: userId });
       await post.save();
       res.json({ message: 'Replied successfully' });
     } else {

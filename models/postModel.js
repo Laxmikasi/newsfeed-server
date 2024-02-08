@@ -16,7 +16,7 @@ const postSchema = new mongoose.Schema({
                     createdAt: { type: Date, default: Date.now },
                     likes: { type: Number, default: 0 },
                     dislikes: { type: Number, default: 0 },
-                    reply :{text: String},
+                    
                     likedBy: [
                       {
                           type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +31,8 @@ const postSchema = new mongoose.Schema({
                     ],
                     replays: [{
                         text: String,
-                        postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+                        replyedBy: { type: mongoose.Schema.Types.ObjectId, 
+                          ref: "User" }
                       }]
                          
 
