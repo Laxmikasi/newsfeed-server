@@ -375,9 +375,9 @@ exports.dislikeComment = async(req, res) =>{
       }
 
       // checking if user already disliked then remove dislike
-      if(commentExist.dislikedBy.includes(userId)){
-          commentExist.dislikedBy.pull(userId);
-          commentExist.dislikes -= 1;
+      if(commentExist.likedBy.includes(userId)){
+          commentExist.likedBy.pull(userId);
+          commentExist.likes -= 1;
       }
 
       // creating like and storing into the database
