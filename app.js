@@ -33,12 +33,14 @@ const userRoutes = require("./routes/userRoutes");
 const loginRoutes = require("./routes/loginRoutes");
 const postRoutes = require("./routes/postRoutes");
 const forgotRoutes = require("./routes/forgotRoutes");
+const shareCountRoutes = require('./routes/shareCountRoutes');
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api", userRoutes); 
 app.use("/api", loginRoutes);
 app.use("/api", postRoutes);
 app.use("/api", forgotRoutes);
+app.use("/api", shareCountRoutes);
 
 
 

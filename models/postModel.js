@@ -16,6 +16,7 @@ const postSchema = new mongoose.Schema({
                     createdAt: { type: Date, default: Date.now },
                     likes: { type: Number, default: 0 },
                     dislikes: { type: Number, default: 0 },
+                    reply :{text: String},
                     likedBy: [
                       {
                           type: mongoose.Schema.Types.ObjectId,
