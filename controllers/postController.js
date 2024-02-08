@@ -293,52 +293,52 @@ exports.likeComment = async(req, res) =>{
   }
 }
 
-exports.dislikeComment = async (req, res) => {
-  try {
-    // Accessing IDs from the dislike route
-    const postId = req.params.postId;
-    const userId = req.user.id;
-    const commentId = req.params.commentId;
+// exports.dislikeComment = async (req, res) => {
+//   try {
+//     // Accessing IDs from the dislike route
+//     const postId = req.params.postId;
+//     const userId = req.user.id;
+//     const commentId = req.params.commentId;
 
-    // Checking IDs validity in the database
-    const postExist = await Post.findById(postId);
-    const userExist = await User.findById(userId);
+//     // Checking IDs validity in the database
+//     const postExist = await Post.findById(postId);
+//     const userExist = await User.findById(userId);
 
-    const commentExist = postExist.comments.id(commentId);
+//     const commentExist = postExist.comments.id(commentId);
 
-    if (!postExist) {
-      return res.status(400).json({ message: 'Post not found' });
-    }
+//     if (!postExist) {
+//       return res.status(400).json({ message: 'Post not found' });
+//     }
 
-    if (!commentExist) {
-      return res.status(400).json({ message: 'Comment not found' });
-    }
+//     if (!commentExist) {
+//       return res.status(400).json({ message: 'Comment not found' });
+//     }
 
-    if (!userExist) {
-      return res.status(400).json({ message: 'User not found' });
-    }
+//     if (!userExist) {
+//       return res.status(400).json({ message: 'User not found' });
+//     }
 
-    // Checking if the user already disliked the comment in the past
-    if (commentExist.dislikedBy.includes(userId)) {
-      return res.status(400).json({ message: 'Comment already disliked' });
-    }
+//     // Checking if the user already disliked the comment in the past
+//     if (commentExist.dislikedBy.includes(userId)) {
+//       return res.status(400).json({ message: 'Comment already disliked' });
+//     }
 
-    // Checking if the user already liked, then remove the like
-    if (commentExist.likedBy.includes(userId)) {
-      commentExist.likedBy.pull(userId);
-      commentExist.likes -= 1;
-    }
+//     // Checking if the user already liked, then remove the like
+//     if (commentExist.likedBy.includes(userId)) {
+//       commentExist.likedBy.pull(userId);
+//       commentExist.likes -= 1;
+//     }
 
-    // Creating dislike and storing it in the database
-    commentExist.dislikedBy.push(userId);
-    commentExist.dislikes += 1;
+//     // Creating dislike and storing it in the database
+//     commentExist.dislikedBy.push(userId);
+//     commentExist.dislikes += 1;
 
-    const savedDislikes = await postExist.save();
-    res.status(200).json(savedDislikes);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//     const savedDislikes = await postExist.save();
+//     res.status(200).json(savedDislikes);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 
 
