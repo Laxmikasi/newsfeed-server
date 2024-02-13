@@ -1,13 +1,21 @@
+const mongoose = require('mongoose');
 
-class ShareCount {
-    constructor(postId, facebookShareCount, twitterShareCount, whatsAppShareCount, linkedInShareCount, emailShareCount) {
-        this.postId = postId;
-        this.facebookShareCount = facebookShareCount;
-        this.twitterShareCount = twitterShareCount;
-        this.whatsAppShareCount = whatsAppShareCount;
-        this.linkedInShareCount = linkedInShareCount;
-        this.emailShareCount = emailShareCount;
+const shareSchema = new mongoose.Schema({
+    postId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+        required: true
+    },
+    socialMedia: {
+        type: String,
+        required: true
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now
     }
-}
+});
 
-module.exports = ShareCount;
+const Share = mongoose.model('Share', shareSchema);
+
+module.exports = Share;
