@@ -415,8 +415,10 @@ exports.replayToComment = async (req, res) => {
 
     if (text && typeof text === 'string' && text.trim() !== '') {
       comment.replays.push({ text, replyedBy: userId });
-      await post.save();
-      res.json({ message: 'Replied successfully' });
+      
+      const savedReplys = await post.save();
+      return res.status(200).json( savedReplys);
+      
     } else {
       return res.status(400).json({ error: 'Invalid replay text' });
     }
