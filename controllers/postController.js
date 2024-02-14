@@ -293,52 +293,7 @@ exports.likeComment = async(req, res) =>{
   }
 }
 
-// exports.dislikeComment = async (req, res) => {
-//   try {
-//     // Accessing IDs from the dislike route
-//     const postId = req.params.postId;
-//     const userId = req.user.id;
-//     const commentId = req.params.commentId;
 
-//     // Checking IDs validity in the database
-//     const postExist = await Post.findById(postId);
-//     const userExist = await User.findById(userId);
-
-//     const commentExist = postExist.comments.id(commentId);
-
-//     if (!postExist) {
-//       return res.status(400).json({ message: 'Post not found' });
-//     }
-
-//     if (!commentExist) {
-//       return res.status(400).json({ message: 'Comment not found' });
-//     }
-
-//     if (!userExist) {
-//       return res.status(400).json({ message: 'User not found' });
-//     }
-
-//     // Checking if the user already disliked the comment in the past
-//     if (commentExist.dislikedBy.includes(userId)) {
-//       return res.status(400).json({ message: 'Comment already disliked' });
-//     }
-
-//     // Checking if the user already liked, then remove the like
-//     if (commentExist.likedBy.includes(userId)) {
-//       commentExist.likedBy.pull(userId);
-//       commentExist.likes -= 1;
-//     }
-
-//     // Creating dislike and storing it in the database
-//     commentExist.dislikedBy.push(userId);
-//     commentExist.dislikes += 1;
-
-//     const savedDislikes = await postExist.save();
-//     res.status(200).json(savedDislikes);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 
 
@@ -425,5 +380,29 @@ exports.replayToComment = async (req, res) => {
   } catch (error) {
     console.error('Error replaying to comment:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.viewCount = async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    // Find the post by its ID
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Increment the views count
+    post.views += 1;
+
+    // Save the updated post
+    await post.save();
+
+    return res.status(200).json({ message: "Views count incremented successfully", views: post.views });
+  } catch (error) {
+    console.error("Error incrementing views count:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
