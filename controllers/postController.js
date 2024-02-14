@@ -384,7 +384,7 @@ exports.replayToComment = async (req, res) => {
 };
 
 exports.viewCount = async (req, res) => {
-  const { postId } = req.params;
+  const postId  = req.params.postId;
 
   try {
     // Find the post by its ID
