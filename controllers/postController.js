@@ -384,7 +384,7 @@ exports.replayToComment = async (req, res) => {
 };
 
 exports.viewCount = async (req, res) => {
-  const postId  = req.params.postId;
+  const postId = req.params.postId;
 
   try {
     // Find the post by its ID
@@ -393,14 +393,14 @@ exports.viewCount = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-
+     
     // Increment the views count
     post.views += 1;
 
     // Save the updated post
-     const savedViews = await post.save();
+    const savedViews = await post.save();
 
-     res.status(200).json(savedViews);
+    return res.status(200).json(savedViews);
   } catch (error) {
     console.error("Error incrementing views count:", error);
     return res.status(500).json({ message: "Internal server error" });
