@@ -398,9 +398,9 @@ exports.viewCount = async (req, res) => {
     post.views += 1;
 
     // Save the updated post
-    await post.save();
+     const savedViews = await post.save();
 
-    return res.status(200).json({ message: "Views count incremented successfully", views: post.views });
+    return res.status(200).json(savedViews);
   } catch (error) {
     console.error("Error incrementing views count:", error);
     return res.status(500).json({ message: "Internal server error" });
