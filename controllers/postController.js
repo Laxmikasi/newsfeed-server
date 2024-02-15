@@ -384,12 +384,13 @@ exports.replayToComment = async (req, res) => {
 };
 
 exports.viewCount = async (req, res) => {
-  const postId = req.params.postId;
-
   try {
     // Find the post by its ID
-    const post = await Post.findById(postId);
-
+    const postId = req.params.postId;
+    const userId = req.user.id;
+        
+     const post = await Post.findById(postId);
+  
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
