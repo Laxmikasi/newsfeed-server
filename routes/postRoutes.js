@@ -29,6 +29,8 @@ router.post('/replay/:postId/:commentId', authMiddleware, postController.replayT
 router.post('/commentlike/:postId/:commentId', authMiddleware, postController.likeComment);
 router.post('/commentdislike/:postId/:commentId', authMiddleware, postController.dislikeComment);
 router.post('/viewCount/:postId',authMiddleware, postController.viewCount);
+router.post('/shareCount/:postId',authMiddleware, postController.shareCount);
+router.delete('/deletePost/:postId',authMiddleware, postController.deletePost);
 
 module.exports = router;
 

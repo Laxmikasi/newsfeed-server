@@ -407,3 +407,47 @@ exports.viewCount = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+exports.shareCount = async (req, res) => {
+  try {
+    // Find the post by its ID
+    const postId = req.params.postId;
+    const userId = req.user.id;
+        
+     const post = await Post.findById(postId);
+  
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+     
+    // Increment the views count
+    post.shareCount += 1;
+
+    // Save the updated post
+    const savedShareCounts = await post.save();
+
+    return res.status(200).json(savedShareCounts);
+  } catch (error) {
+    console.error("Error incrementing views count:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// exports.deletePost = async (req, res) => {
+//   try {
+//     const postId = req.params.postId;
+
+//     const post = await Post.findById(postId);
+
+//     if (!post) {
+//       return res.status(404).json({ error: 'Post not found' });
+//     }
+
+//     await Post.findByIdAndDelete(postId);
+
+//     res.status(200).json({ message: 'Post deleted successfully' });
+//   } catch (error) {
+//     console.error('Error deleting post:', error);
+//     res.status(500).json({ error: 'Internal Server Error: Could not delete post' });
+//   }
+// };
