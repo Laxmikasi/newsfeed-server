@@ -41,10 +41,7 @@ const postSchema = new mongoose.Schema({
         createdAt: { type: Date, default: Date.now },
         Author : { 
             UserId : String,
-            ProfilePic : String, 
-            Name : String
-      
-    },
+            },
     likedBy: [
       {
           type: mongoose.Schema.Types.ObjectId,
@@ -56,8 +53,10 @@ const postSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
       }
-    ]
-         
+    ],
+    
+    views: { type: Number, default: 0 },
+    shareCount: { type: Number, default: 0 }     
    
   })
   
