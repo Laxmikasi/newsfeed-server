@@ -1,3 +1,4 @@
+// models/Share.js
 const mongoose = require('mongoose');
 
 const shareSchema = new mongoose.Schema({
@@ -9,6 +10,10 @@ const shareSchema = new mongoose.Schema({
     socialMedia: {
         type: String,
         required: true
+    },
+    count: {  // Add a count field to track share count
+        type: Number,
+        default: 0
     },
     timestamp: {
         type: Date,
