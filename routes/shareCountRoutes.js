@@ -1,8 +1,7 @@
-
 const express = require('express');
 const router = express.Router();
-const shareController = require('../controllers/shareCountController');
+const shareCountController = require('../controllers/shareCountController');
 
-router.post('share/:socialMedia', shareController.sharePost);
+router.post('/share/:socialMedia', shareCountController.sharePost);
 
 module.exports = router;
