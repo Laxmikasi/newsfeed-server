@@ -31,6 +31,7 @@ router.post('/commentdislike/:postId/:commentId', authMiddleware, postController
 router.post('/viewCount/:postId',authMiddleware, postController.viewCount);
 router.post('/shareCount/:postId',authMiddleware, postController.shareCount);
 router.delete('/deletePost/:postId',authMiddleware, postController.deletePost);
+router.put('/editPost/:postId',upload.single('image'), authMiddleware, postController.editPost);
 
 module.exports = router;
 

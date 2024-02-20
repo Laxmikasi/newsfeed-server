@@ -44,8 +44,7 @@ exports.addPost =  async (req, res) => {
 
       Author : { 
         UserId : customer._id,
-        ProfilePicture:customer.profilePicture,
-        Name: `${customer.firstName} ${customer.lastName}`
+       
   }
      
       });
@@ -433,21 +432,51 @@ exports.shareCount = async (req, res) => {
   }
 };
 
-// exports.deletePost = async (req, res) => {
-//   try {
-//     const postId = req.params.postId;
+exports.deletePost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
 
-//     const post = await Post.findById(postId);
+    const post = await Post.findById(postId);
 
-//     if (!post) {
-//       return res.status(404).json({ error: 'Post not found' });
-//     }
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
 
-//     await Post.findByIdAndDelete(postId);
+    await Post.findByIdAndDelete(postId);
 
-//     res.status(200).json({ message: 'Post deleted successfully' });
-//   } catch (error) {
-//     console.error('Error deleting post:', error);
-//     res.status(500).json({ error: 'Internal Server Error: Could not delete post' });
-//   }
-// };
+    res.status(200).json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    res.status(500).json({ error: 'Internal Server Error: Could not delete post' });
+  }
+};
+
+
+exports.editPost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const { title, content, timestamp } = req.body;
+
+    let updateFields = {
+      title,
+      content,
+      timestamp
+    };
+
+    if (req.file) {
+      // If there's an image attached, handle it accordingly
+      updateFields.image = `/uploads/${req.file.filename}`; // Adjust this based on how you store images
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(postId, updateFields, { new: true });
+
+    if (!updatedPost) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    res.status(200).json({ message: 'Post updated successfully', updatedPost });
+  } catch (error) {
+    console.error('Error editing post:', error);
+    res.status(500).json({ error: 'Internal Server Error: Could not edit post' });
+  }
+};
