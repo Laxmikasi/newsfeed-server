@@ -41,6 +41,10 @@ exports.forgotPassword= (req, res) => {
         auth: {
             user: 'kasireddylaxmi66040@gmail.com',
             pass: 'vtdk habm egeb sbgg'
+        },
+        tls: {
+          // This option tells Node.js to trust the self-signed certificate
+          rejectUnauthorized: false
         }
         });
         
